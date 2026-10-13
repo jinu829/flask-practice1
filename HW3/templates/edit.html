@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>할 일 수정</title>
+  </head>
+  <body>
+    <h2>할 일 수정</h2>
+
+    <form method="post" action="{{ url_for('edit', id=todo.id) }}">
+      <input type="text" name="todo" value="{{ todo.text }}" />
+      <input type="text" name="note" value="{{ todo.note }}" />
+      <button type="submit">저장</button>
+    </form>
+
+    <p><a href="{{ url_for('index') }}">목록으로</a></p>
+  </body>
+</html>
