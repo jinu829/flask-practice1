@@ -32,3 +32,6 @@ a {
 a:hover {
   text-decoration: underline;
 }
+.done {
+  text-decoration: line-through;
+}
