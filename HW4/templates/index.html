@@ -1,0 +1,27 @@
+{% extends "base.html" %} {%block title %}Todo List - Todo App{%endblock%}
+{%block content%}
+<h2>Add New Todo</h2>
+<form method="post">
+  <input type="text" name="todo" required />
+  <input type="text" name="note" placeholder="설명" />
+  <button type="submit">Add Todo</button>
+</form>
+
+<h2>Todo List</h2>
+{% if todos %}
+<ul>
+  {% for todo in todos %}
+  <li>
+    <a href="{{ url_for('toggle', id = todo.id) }}">완료</a>
+    {% if todo.done %}
+    <span class="done">{{ todo.text }}</span>
+    {% else %} {{ todo.text }}{% endif %}
+    <a href="{{ url_for('delete', id=todo.id) }}">Delete</a>
+    <!-- Delete라는 버튼을 옆에 만드는데, 거기에 delete함수를 실행하는 링크를 걸어줌 -->
+    <span class="note">{{ todo.note }}</span>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No todos yet. Add some!</p>
+{% endif %} {%endblock%}
