@@ -1,8 +1,12 @@
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+from flask_restx import Api, Resource, fields  # [실습 1] 추가
 
 app = Flask(__name__)
 
+
+"""
+5장 전 코드들
 @app.route('/')
 def index():
     return f"<a href='{url_for('about')}'>소개로</a>"
@@ -43,6 +47,12 @@ def show_user_profile(username):
 def post(pid):
     return f'{pid}번 글 (자료형: {type(pid).__name__})'
 
+    
+
+
+
+
+4장
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -101,12 +111,7 @@ def user_profile(username):
 @app.route('/newuser/<username>')
 def new_user(username):
     return render_template('profile.html', username = username, posts=[])
-
-
-
-
-
-
+"""
 
 
 
