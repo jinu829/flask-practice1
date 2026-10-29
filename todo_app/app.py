@@ -67,6 +67,8 @@ def toggle(id):
 # Blueprint 로 한 번 감싸고 거기에 Api 를 붙입니다.
 # 이렇게 해야 /api 아래에서만 JSON 이 나오고, 위의 화면 라우트는 그대로 남습니다.
 api_bp = Blueprint("api", __name__, url_prefix="/api")
+
+#전체적인 api기본 설정
 api = Api(
     api_bp,
     version="1.0",
@@ -76,7 +78,7 @@ api = Api(
 )
 ns = api.namespace("todos", description="할 일 하나하나를 다루는 곳")
 
-# 주고받을 데이터의 모양입니다. 이것이 곧 문서가 됩니다.
+# 주고받을 데이터의 모양
 todo_model = api.model(
     "Todo",
     {
@@ -88,7 +90,7 @@ todo_model = api.model(
     },
 )
 
-# 만들 때와 바꿀 때 받을 것. id 는 받지 않습니다.
+# 입력받는 데이터 형식
 todo_input = api.model(
     "TodoInput",
     {
@@ -100,9 +102,9 @@ todo_input = api.model(
 )
 
 
-@ns.route("/")
+@ns.route("/") #api/todos/경로에서
 class TodoList(Resource):
-    @ns.doc("목록 보기")
+    @ns.doc("목록 보기") #ns.doc : 문서 설명
     @ns.marshal_list_with(todo_model)
     def get(self):
         """할 일을 전부 돌려준다"""
@@ -112,7 +114,7 @@ class TodoList(Resource):
     @ns.expect(todo_input, validate=True)
     @ns.marshal_with(todo_model, code=201)
     def post(self):
-        """할 일을 하나 만든다"""
+        """할 일을 하나 데이터베이스에 추가하고, 넣은 일 표시"""
         todo = Todo(text=api.payload["text"], done=api.payload.get("done", False))
         db.session.add(todo)
         db.session.commit()
@@ -145,7 +147,7 @@ class TodoItem(Resource):
     @ns.expect(todo_input)
     @ns.marshal_with(todo_model)
     def patch(self, id):
-        """보낸 칸만 바꾼다. 완료 표시를 뒤집을 때 씁니다"""
+        """text면 text만, done이면 done만 바꾼다"""
         todo = get_or_abort(id)
         if "text" in api.payload:
             todo.text = api.payload["text"]
@@ -163,7 +165,7 @@ class TodoItem(Resource):
         db.session.commit()
         return "", 204
 
-
+#id에 따른 todo클래스를 가져오는 함수.
 def get_or_abort(id):
     """없는 번호면 404 를 JSON 으로 돌려준다."""
     todo = db.session.get(Todo, id)
